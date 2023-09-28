@@ -7,7 +7,6 @@ import torch.optim as optim
 from torchvision import datasets, transforms
 from torch.optim.lr_scheduler import StepLR
 
-
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
@@ -98,7 +97,6 @@ def main():
     args = parser.parse_args()
     use_cuda = not args.no_cuda and torch.cuda.is_available()
     use_mps = not args.no_mps and torch.backends.mps.is_available()
-
     torch.manual_seed(args.seed)
 
     if use_cuda:

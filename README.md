@@ -2,7 +2,7 @@
 Tutorial for getting set up on the ICME cluster.
 This is used in the Stanford Course CME 218, Applied Data Science, a hands-on project course for graduate students working on machine learning and data science projects.
 ## Point of Contact
-If something in this guide is unclear, please contact me at epsteine@stanford.edu!
+If something in this guide is unclear, please contact Elliot Epstein at epsteine@stanford.edu!
 
 ## Logging on to the cluster
 The first step is to get access to the ICME cluster. All registered students should 
@@ -29,7 +29,10 @@ You can check that you are on the compute node by running
 nvidia-smi
 ```
 This will show you which GPUs are available. If you get an error, you are most likely still on the login node.
-
+If you don't need access to GPUs, you can use the ICME-share cluster instead:
+```
+ssh <username>@icme-share.stanford.edu
+```
 
 ## Managing package dependencies
 When running code on the cluster, you may have package dependencies (such as Numpy or Pytorch) that you need to install.
@@ -87,24 +90,16 @@ List the installed packages with
 ```
 conda list
 ```
-Let's add matplotlib:
-
-```
-conda install matplotlib
-```
 Let's add pytorch and it's dependencies. Start by checking the cuda version on the cluster, this can be done with 
 ```
 nvidia-smi
 ```
-From this, I can see that the cuda version is 11.7.
+From this, I can see that the cuda version on the V100 partition is 11.7.
 Now we can install pytorch with the following command (see https://pytorch.org/get-started/locally/)
 ```
 conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia
 ```
-To install with cuda version 11.3 instead (on k80 partition, CUDA 11.3 is compatible with CUDA 11.4), use
-```
-conda install pytorch==1.12.1 torchvision==0.13.1 torchaudio==0.12.1 cudatoolkit=11.3 -c pytorch
-```
+
 This will take a few minutes.
 
 ## Connect to VS Code
