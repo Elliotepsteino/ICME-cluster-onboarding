@@ -87,7 +87,11 @@ List the installed packages with
 ```
 conda list
 ```
-Be
+Let's add matplotlib:
+
+```
+conda install matplotlib
+```
 Let's add pytorch and it's dependencies. Start by checking the cuda version on the cluster, this can be done with 
 ```
 nividia-smi
@@ -123,6 +127,8 @@ where `<username>` is your Stanford username. You will then need to enter your p
 You can now open the code and make changes from VSCode.
 
 In addition to editing code, VS Code allows you to view images, render markdown files, and connect to a terminal.
+
+You can open a terminal inside vs code by clicking on the terminal bar on the top left and selecting new terminal.
 
 ## Getting data on the Cluster
 To get data on the cluster, you can use the `scp` command. This command allows you to transfer files between your local computer and the cluster.
@@ -220,9 +226,9 @@ nvidia-smi -l 1
 This will show the GPU usage, refreshed every second.
 Navigate back to the original window and run the training script by typing:
 ```
-python mnist_pytorch_example.py --epochs 5 --save-model True
+python mnist_pytorch_example.py --epochs 2 --save-model
 ```
-This will download the mnist dataset and train the model for 5 epochs and save the trained model weights. You should see the loss decreasing and arond 1.7 GB of GPU memory being used. The MNIST data will be downloaded in the home directory.
+This will download the mnist dataset and train the model for 2 epochs and save the trained model weights. You should see the loss decreasing and arond 1.7 GB of GPU memory being used. The MNIST data will be downloaded in the home directory.
 
 
 ## Other useful commands
