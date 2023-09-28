@@ -8,7 +8,11 @@ If something in this guide is unclear, please contact Elliot Epstein at epsteine
 The first step is to get access to the ICME cluster. All registered students should 
 have been added to the cluster. Let me know if this is not the case. Some basic information about the cluster can be found [here](https://icme.stanford.edu/get-involved/resources/hpc-resources).
 
-Check that you have access by ssh'ing into the cluster. You can do this by typing the following command into your terminal:
+If you are using Windows, it's recommended to first install windows subsystem for linux. This
+can be installed here: https://learn.microsoft.com/en-us/windows/wsl/install
+
+Check that you have access by ssh'ing into the cluster. 
+You can do this by typing the following command into your terminal:
 ```
 ssh <username>@icme-gpu.stanford.edu
 ```
@@ -27,6 +31,10 @@ srun --partition=k80 --gres=gpu:2 --pty bash
 You can check that you are on the compute node by running 
 ```
 nvidia-smi
+```
+Exit to the login node by running 
+```
+control-a d
 ```
 This will show you which GPUs are available. If you get an error, you are most likely still on the login node.
 If you don't need access to GPUs, you can use the ICME-share cluster instead:
@@ -90,7 +98,7 @@ List the installed packages with
 ```
 conda list
 ```
-Let's add pytorch and it's dependencies. Start by checking the cuda version on the cluster, this can be done with 
+Let's make sure we are on the V100 partition. We can now add pytorch and it's dependencies. Start by checking the cuda version on the cluster, this can be done with 
 ```
 nvidia-smi
 ```
@@ -100,7 +108,7 @@ Now we can install pytorch with the following command (see https://pytorch.org/g
 conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia
 ```
 
-This will take a few minutes.
+This will take more then 10 minutes.
 
 ## Connect to VS Code
 If you want to modify the code, you can either use a text editor such as emacs (https://www.gnu.org/software/emacs/) or you can use VSCode. 
