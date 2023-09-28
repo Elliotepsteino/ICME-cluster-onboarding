@@ -1,6 +1,6 @@
 # ICME Cluster Onboarding
-Tutorial for ICME Cluster Onboarding.
-This is used in the Stanford Course CME 218, Applied Data Science, A hands-on project course for graduate students working on machine learning and data science projects.
+Tutorial for getting set up on the ICME cluster.
+This is used in the Stanford Course CME 218, Applied Data Science, a hands-on project course for graduate students working on machine learning and data science projects.
 ## Point of Contact
 If something in this guide is unclear, please contact me at epsteine@stanford.edu!
 
@@ -94,12 +94,16 @@ conda install matplotlib
 ```
 Let's add pytorch and it's dependencies. Start by checking the cuda version on the cluster, this can be done with 
 ```
-nividia-smi
+nvidia-smi
 ```
 From this, I can see that the cuda version is 11.7.
 Now we can install pytorch with the following command (see https://pytorch.org/get-started/locally/)
 ```
 conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia
+```
+To install with cuda version 11.3 instead (on k80 partition, CUDA 11.3 is compatible with CUDA 11.4), use
+```
+conda install pytorch==1.12.1 torchvision==0.13.1 torchaudio==0.12.1 cudatoolkit=11.3 -c pytorch
 ```
 This will take a few minutes.
 
@@ -132,12 +136,17 @@ You can open a terminal inside vs code by clicking on the terminal bar on the to
 
 ## Getting data on the Cluster
 To get data on the cluster, you can use the `scp` command. This command allows you to transfer files between your local computer and the cluster.
-Download the image from the Canvas page and save it in your home directory. Then type the following command into your local terminal:
+Download the images from the ICME-cluster-onboarding folder in the files on the CME 218 Canvas page. 
+
+Then upload the images to the cluster by typing the following commands into your local terminal:
 
 ```
-scp /local_path_to_image/sample_image_mnist.png <username>@icme-gpu.stanford.edu:~/ICME-cluster-onboarding/
+scp /local_path_to_image/mnist_image.png <username>@icme-gpu.stanford.edu:~/ICME-cluster-onboarding/
 ```
-where `<username>` is your Stanford username. This will upload the image to the cluster.
+```
+scp /local_path_to_image/mnist_image_rotated.png <username>@icme-gpu.stanford.edu:~/ICME-cluster-onboarding/
+```
+where `<username>` is your Stanford username. This will upload the image to the ICME-cluster-onboarding folder on the cluster.
 
 You can use the -r option if you want to move a directory instead of a file onto the cluster, for example
 
@@ -174,7 +183,11 @@ This will show you all the screen sessions. To reattach to an existing screen se
 screen -r <screen_name>
 ```
 where `<screen_name>` is the name of your screen session. For example, you can use different conda environments in different screen sessions.
-
+To remove a screen session, first attach to it,
+and then do:
+```
+control-a k
+```
 Sometimes, it's also useful to split your screen into multiple windows, for example if you want to monitor GPU usage while running a program. From within a screen session, you can split the screen vertically by typing:
 ```
 control-a |
@@ -187,6 +200,7 @@ Once on the new tab, you can create a terminal by typing:
 ```
 control-a c
 ```
+
 ## Train a Neural Network on the cluster
 We will now train a basic Neural Network on the MNIST dataset. 
 
@@ -230,7 +244,12 @@ python mnist_pytorch_example.py --epochs 2 --save-model
 ```
 This will download the mnist dataset and train the model for 2 epochs and save the trained model weights. You should see the loss decreasing and arond 1.7 GB of GPU memory being used. The MNIST data will be downloaded in the home directory.
 
-
+After the training is done, you can run inference on the images you uploaded. You may need to change the image name in the inference_single_image.py file. 
+```
+python inference_single_image.py
+```
+What is the most likely class for the up-side down seven?
+What about the correctly oriented seven?
 ## Other useful commands
 You can change which GPU you are using to run a script by typing:
 ```
@@ -263,10 +282,9 @@ Exit the scrolling by pressing esc again.
 
 
 Debug in python by setting breakpoints, by the breakpoint() function, this allows you to step through the code and inspect variables more efficiently than using print statements.
-### Emacs
 
 ### Visualization
-To track performance of the jobs as they run, it's useful to use logging like Weights and Biases. 
+To track performance of ML jobs as they run, it's useful to use logging packages like Weights and Biases (https://wandb.ai/site).
 
 ### Running bash scripts
 Bash scripts is a useful way to run multiple jobs at once. There is a batch script to run the mnist example on two different GPU nodes, with different learning rate. Run the bash script with 
@@ -274,11 +292,6 @@ Bash scripts is a useful way to run multiple jobs at once. There is a batch scri
 bash run_mnist.sh
 ```
 This will run the mnist example on two different GPU nodes, with different learning rate.
-Remeber that you must be on a compute node with two GPUs to run this script. 
-
-
-To install pytorch, type the following command:
-```
-pip3 install torch torchvision torchaudio
-```
-You are now installing pytorch in the screen session. This will take a few minutes. 
+Remember that you must be on a compute node with two GPUs to run this script. 
+### Author
+Elliot Epstein
