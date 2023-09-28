@@ -136,8 +136,16 @@ You can now open the code and make changes from VSCode.
 In addition to editing code, VS Code allows you to view images, render markdown files, and connect to a terminal.
 
 You can open a terminal inside vs code by clicking on the terminal bar on the top left and selecting new terminal.
-
-## Getting data on the Cluster
+## Clone the repo
+Type the following command to clone the repository:
+```
+git clone https://github.com/Elliotepsteino/ICME-cluster-onboarding.git
+```
+This will create a folder called ICME-cluster-onboarding. Navigate into this folder by typing:
+```
+cd ICME-cluster-onboarding
+```
+## Getting data on the cluster
 To get data on the cluster, you can use the `scp` command. This command allows you to transfer files between your local computer and the cluster.
 Download the images from the ICME-cluster-onboarding folder in the files on the CME 218 Canvas page. 
 
@@ -207,14 +215,6 @@ control-a c
 ## Train a Neural Network on the cluster
 We will now train a basic Neural Network on the MNIST dataset. 
 
-Type the following command to clone this repository:
-```
-git clone https://github.com/Elliotepsteino/ICME-cluster-onboarding.git
-```
-This will create a folder called ICME-cluster-onboarding. Navigate into this folder by typing:
-```
-cd ICME-cluster-onboarding
-```
 Have a quick look at the code in the mnist_pytorch_example.py code. This code trains a simple neural network on the MNIST dataset. The MNIST dataset contains handwritten digits and the goal is to classify the digits correctly.
 Let's create a screen session to run the training script in. Type:
 ```
