@@ -147,7 +147,7 @@ cd ICME-cluster-onboarding
 ```
 ## Getting data on the cluster
 To get data on the cluster, you can use the `scp` command. This command allows you to transfer files between your local computer and the cluster.
-Download the images from the ICME-cluster-onboarding folder in the files on the CME 218 Canvas page. 
+Download the images from the ICME-cluster-onboarding folder in the files on the CME 218 Canvas page (in case you don't have access to the CME 218 canvas page, I have included the images in the /images folder on the repo)
 
 Then upload the images to the cluster by typing the following commands into your local terminal:
 
@@ -157,7 +157,12 @@ scp /local_path_to_image/mnist_image.png <username>@icme-gpu.stanford.edu:~/ICME
 ```
 scp /local_path_to_image/mnist_image_rotated.png <username>@icme-gpu.stanford.edu:~/ICME-cluster-onboarding/
 ```
-where `<username>` is your Stanford username. This will upload the image to the ICME-cluster-onboarding folder on the cluster.
+where `<username>` is your Stanford username. This will upload the image to the ICME-cluster-onboarding folder on the cluster. If you use the images in the /image folder. Move them to the ICME-cluster-onboarding folder with the follwing command from the ICME-cluster-onboarding directory:
+
+```
+mv ./images/mnist_image_rotated.png .
+mv ./images/mnist_image.png .
+```
 
 You can use the -r option if you want to move a directory instead of a file onto the cluster, for example
 
