@@ -8,15 +8,22 @@ If something in this guide is unclear, please contact Elliot Epstein at epsteine
 The first step is to get access to the ICME cluster. All registered students should 
 have been added to the cluster. Let me know if this is not the case.
 
+
 If you are using Windows, it's recommended to first install windows subsystem for linux. This
 can be installed here: https://learn.microsoft.com/en-us/windows/wsl/install
 
-Check that you have access by ssh'ing into the cluster. 
+To use ssh to connect to the cluster you will need to be on the Stanford VPN.
+
+Follow the guide [here](https://uit.stanford.edu/service/vpn) to set up the VPN. You will need to authenticate with
+one duo mobile to get on to the VPN. 
+Now check that you have access by ssh'ing into the cluster. 
 You can do this by typing the following command into your terminal:
 ```
 ssh <username>@icme-course-login.stanford.edu
 ```
 where `<username>` is your Stanford username. A message similar to "The authenticity of the host 'icme-course-login.stanford.edu can't be established", are you sure you want to continue..." will appear. Type "yes" and hit enter. You will then be prompted to enter your password. Enter your Stanford password and hit enter. You should now be logged into the cluster.
+
+If you get an error where nothing happens when you try to ssh in to the cluster, you may not be connected to the VPN.
 
 You are currently on the login-node of the cluster. To run computation, you will need to transfer to a compute-node. To do this, type the following command into your terminal:
 ```
