@@ -231,7 +231,7 @@ screen -S CME_218
 ```
 Let's make sure the conda environment we created earlier is activated, as the script uses PyTorch. Type:
 ```
-source ~/courses/cme218/cme218-venv/bin/activate
+source activate cme_218
 ```
 Let's split the screen so we can monitor the GPU usage while training the model. Type:
 ```
@@ -343,11 +343,6 @@ This will take more then 10 minutes.
 You can exit the venv session with the following command
 ```
 deactivate
-```
-
-Automated installation by submitting a job to the GPU partition to build unattended :-)
-```
-sbatch /opt/ohpc/pub/examples/slurm/build_pytorch_venv.slurm
 ```
 
 ### Author
