@@ -313,44 +313,6 @@ bash run_mnist.sh
 ```
 This will run the mnist example on two different GPU nodes, with different learning rate.
 Remember that you must be on a compute node with two GPUs to run this script. 
-### Alternative package management with venv
-As an alternative to using conda, I include some instructions for getting set up using venv.
-
-When running code on the cluster, you may have package dependencies (such as Numpy or Pytorch) that you need to install.
-To manager your dependencies, I recommend using the Python venv module.
-Python venv creates lightweight “virtual environments”, which can be very useful if you are working on multiple projects 
-with conflicting package dependencies. More information can be found here https://docs.python.org/3/library/venv.html
-
-Step-by-step setup (**see Automated install below**)
-
-Let's create a venv environment:
-```
-mkdir -p ~/courses/cme218 && cd ~/courses/cme218
-python -m venv cme218-venv
-```
-This will take a few min. 
-
-Let's log onto a GPU node.
-```
-srun -p gpu-pascal --gres=gpu:1 --pty bash
-```
-
-Now, activate the environment with 
-```
-source cme218-venv/bin/activate
-```
-
-Now we can install pytorch with the following command (see https://pytorch.org/get-started/locally/)
-```
-pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
-```
-
-This will take more then 10 minutes.
-
-You can exit the venv session with the following command
-```
-deactivate
-```
 
 ### Author
 Elliot Epstein
