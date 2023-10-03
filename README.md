@@ -6,7 +6,7 @@ If something in this guide is unclear, please contact Elliot Epstein at epsteine
 
 ## Logging on to the cluster
 The first step is to get access to the ICME cluster. All registered students should 
-have been added to the cluster. Let me know if this is not the case. Some basic information about the cluster can be found [here](https://icme.stanford.edu/get-involved/resources/hpc-resources).
+have been added to the cluster. Let me know if this is not the case.
 
 If you are using Windows, it's recommended to first install windows subsystem for linux. This
 can be installed here: https://learn.microsoft.com/en-us/windows/wsl/install
@@ -14,101 +14,98 @@ can be installed here: https://learn.microsoft.com/en-us/windows/wsl/install
 Check that you have access by ssh'ing into the cluster. 
 You can do this by typing the following command into your terminal:
 ```
-ssh <username>@icme-gpu.stanford.edu
+ssh <username>@icme-course-login.stanford.edu
 ```
-where `<username>` is your Stanford username. A message similar to "The authenticity of the host 'icme-gpu.stanford.edu can't be established", are you sure you want to continue..." will appear. Type "yes" and hit enter. You will then be prompted to enter your password. Enter your Stanford password and hit enter. You should now be logged into the cluster.
+where `<username>` is your Stanford username. A message similar to "The authenticity of the host 'icme-course-login.stanford.edu can't be established", are you sure you want to continue..." will appear. Type "yes" and hit enter. You will then be prompted to enter your password. Enter your Stanford password and hit enter. You should now be logged into the cluster.
 
 You are currently on the login-node of the cluster. To run computation, you will need to transfer to a compute-node. To do this, type the following command into your terminal:
 ```
-srun --partition=V100 --gres=gpu:1 --pty bash
+srun -p gpu-pascal --gres=gpu:1 --pty bash
 ```
-The partiton is which GPU to use. You must use either the V100, k80, or CME partition. The gres is the number of GPUs you want to use. The pty bash is to open a bash terminal. 
+The partiton is which GPU to use. You must use either the gpu-pascal, gpu-volta, or gpu-turing partition. The gres is the number of GPUs you want to use. The pty bash is to open a bash terminal. 
 
-To get two GPUs on the k80 node type:
+To get two GPUs use the gpu-volta or gpu-turing paritions:
 ```
-srun --partition=k80 --gres=gpu:2 --pty bash
+srun -p gpu-volta --gres=gpu:2 --pty bash
 ```
-You can check that you are on the compute node by running 
+You can check that you are on the gpu node by running 
 ```
 nvidia-smi
 ```
+This will show you which GPUs are available. If you get an error, you are most likely still on the login node.
+
 Exit to the login node by running 
 ```
 control-a d
 ```
-This will show you which GPUs are available. If you get an error, you are most likely still on the login node.
-If you don't need access to GPUs, you can use the ICME-share cluster instead:
+
+If you don't need access to GPUs, you can submit to CPU nodes instead:
 ```
-ssh <username>@icme-share.stanford.edu
+srun --pty bash
 ```
 
 ## Managing package dependencies
-When running code on the cluster, you may have package dependencies (such as Numpy or Pytorch) that you need to install.
-To manager your dependencies, I recommend to use Anaconda.
-Anaconda is a package manager for Python. Using Anaconda allows us to for example have different packages 
-installed in different environment, which can be very useful if you are working on multiple projects 
-with conflicting package dependencies. 
+When running code on the cluster, you may have package dependencies (such as Numpy or Pytorch) that you need to install. To manager your dependencies, I recommend to use Anaconda. Anaconda is a package manager for Python. Using Anaconda allows us to for example have different packages installed in different environment, which can be very useful if you are working on multiple projects with conflicting package dependencies.
 
-To make sure you are downloading anaconda for the right operating system, check the operating system on the server with 
+Conda is already installed on the cluster. It's needs to be initiated first 
+by running 
+
 ```
-cat /etc/os-release
-```
-From this, I can see that I am running ubuntu 22 LTS and I should hence use the Linux version of anaconda. Find the link address for the Anaconda installer for python 3.11 and download it to the server with
-```
-wget https://repo.anaconda.com/archive/Anaconda3-2023.07-2-Linux-x86_64.sh
+eval "$(/opt/ohpc/pub/compiler/anancoda3/2023.09-0/bin/conda shell.bash hook)"
+conda init
 ```
 
-Then install anaconda with the following command:
-```
-bash Anaconda-latest-Linux-x86_64.sh
-```
-Follow the prompted instructions with all defaults.
 
-After this is done, go ahead and close and reopen the terminal.
-
-If the installation works correctly, the command 
+If the installation works correctly, the command
 ```
 conda
 ```
-should give a menu of options. 
+should give a menu of options.
 
-We can go ahead and delete the installer:
-```
-rm Anaconda3-2023.07-2-Linux-x86_64.sh
-```
 My go-to cheat-sheet for anaconda is [here](https://docs.conda.io/projects/conda/en/4.6.0/_downloads/52a95608c49671267e40c689e0bc00ca/conda-cheatsheet.pdf)
 
 Following the cheat cheet, let's create an anaconda environment.
 ```
 conda create --name cme_218 python=3.9
 ```
-This will take a few min. 
+This will take a few min.
 
-Now, activate the environment with 
+Now, activate the environment with
 ```
-conda activate cme_218
+source activate cme_218
 ```
-Packages you install will now be installed on the cme_218 environment. 
+Packages you install will now be installed on the cme_218 environment.
 
-You can now list all your environments with 
+You can now list all your environments with
 ```
 conda env list
 ```
-List the installed packages with 
+List the installed packages with
 ```
 conda list
 ```
-Let's make sure we are on the V100 partition. We can now add pytorch and it's dependencies. Start by checking the cuda version on the cluster, this can be done with 
+Let's make sure we are on the Pascal partition. We can now add pytorch and it's dependencies. Start by checking the cuda version on the cluster, this can be done with
 ```
 nvidia-smi
 ```
-From this, I can see that the cuda version on the V100 partition is 11.7.
-Now we can install pytorch with the following command (see https://pytorch.org/get-started/locally/)
+From this, I can see that the cuda version on the Pascal partition is 12.2. The most recent stable the release of Pytorch use CUDA 11.8, so let's use that version. Now we can install pytorch with the following command (see https://pytorch.org/get-started/locally/)
 ```
-conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia
+conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
 ```
-
 This will take more then 10 minutes.
+You can check that pytorch was successfully installed with GPU support by starting a python terminal
+```
+python3
+```
+and then importing torch and seeing if a GPU is available
+```
+import torch
+torch.cuda.is_available()
+```
+This should output True. Exit the python termial with 
+```
+control-d
+```
 
 ## Connect to VS Code
 If you want to modify the code, you can either use a text editor such as emacs (https://www.gnu.org/software/emacs/) or you can use VSCode. 
@@ -127,9 +124,9 @@ I also recommend to install GitHub Copilot, which you can get for free as a stud
 
 Now, to connect to the cluster, press command-shift-p and type "Remote-SSH: Connect to Host". Then type:
 ```
-<username>@icme-gpu.stanford.edu
+<username>@icme-course-login.stanford.edu
 ```
-where `<username>` is your Stanford username. You will then need to enter your password twice. 
+where `<username>` is your Stanford username. You will then need to enter your password twice.
 
 You can now open the code and make changes from VSCode.
 
@@ -152,10 +149,10 @@ Download the images from the ICME-cluster-onboarding folder in the files on the 
 Then upload the images to the cluster by typing the following commands into your local terminal:
 
 ```
-scp /local_path_to_image/mnist_image.png <username>@icme-gpu.stanford.edu:~/ICME-cluster-onboarding/
+scp /local_path_to_image/mnist_image.png <username>@icme-course-login.stanford.edu:~/ICME-cluster-onboarding/
 ```
 ```
-scp /local_path_to_image/mnist_image_rotated.png <username>@icme-gpu.stanford.edu:~/ICME-cluster-onboarding/
+scp /local_path_to_image/mnist_image_rotated.png <username>@icme-course-login.stanford.edu:~/ICME-cluster-onboarding/
 ```
 where `<username>` is your Stanford username. This will upload the image to the ICME-cluster-onboarding folder on the cluster. If you use the images in the /image folder. Move them to the ICME-cluster-onboarding folder with the follwing command from the ICME-cluster-onboarding directory:
 
@@ -167,14 +164,15 @@ mv ./images/mnist_image.png .
 You can use the -r option if you want to move a directory instead of a file onto the cluster, for example
 
 ```
-scp -r ./directory_to_move/ <username>@icme-gpu.stanford.edu:~/ICME-cluster-onboarding/
+scp -r ./directory_to_move/ <username>@icme-course-login.stanford.edu:~/ICME-cluster-onboarding/
 ```
 
 To download a file from the cluster, type the following command into your local terminal:
 ```
-scp <username>@icme-gpu.stanford.edu:/file_path/<filename> /local_path/
+scp <username>@icme-course-login.stanford.edu:/file_path/<filename> /local_path/
 ```
 where `<username>` is your Stanford username, local_path is the path to where you want to save the file on your local computer, and filename is the name of the file you want to download. You can download the file to the current path by typing `.` as the /local_path/.
+
 ## Screen
 Screen is a linux program that allows you to run multiple programs at once. It also allows you to run programs in the background, so that you can close the terminal without stopping the program. This is really useful if you have jobs that take a long time to run. 
 
@@ -221,19 +219,26 @@ control-a c
 We will now train a basic Neural Network on the MNIST dataset. 
 
 Have a quick look at the code in the mnist_pytorch_example.py code. This code trains a simple neural network on the MNIST dataset. The MNIST dataset contains handwritten digits and the goal is to classify the digits correctly.
+
+First, log onto a GPU node
+```
+srun -p gpu-pascal --gres=gpu:1 --pty bash
+```
+
 Let's create a screen session to run the training script in. Type:
 ```
 screen -S CME_218
 ```
 Let's make sure the conda environment we created earlier is activated, as the script uses PyTorch. Type:
 ```
-conda activate cme_218
+source ~/courses/cme218/cme218-venv/bin/activate
 ```
 Let's split the screen so we can monitor the GPU usage while training the model. Type:
 ```
 control-a |
 ```
 followed by: 
+
 ```
 control-a tab
 ```
@@ -301,5 +306,51 @@ bash run_mnist.sh
 ```
 This will run the mnist example on two different GPU nodes, with different learning rate.
 Remember that you must be on a compute node with two GPUs to run this script. 
+### Alternative package management with venv
+As an alternative to using conda, I include some instructions for getting set up using venv.
+
+When running code on the cluster, you may have package dependencies (such as Numpy or Pytorch) that you need to install.
+To manager your dependencies, I recommend using the Python venv module.
+Python venv creates lightweight “virtual environments”, which can be very useful if you are working on multiple projects 
+with conflicting package dependencies. More information can be found here https://docs.python.org/3/library/venv.html
+
+Step-by-step setup (**see Automated install below**)
+
+Let's create a venv environment:
+```
+mkdir -p ~/courses/cme218 && cd ~/courses/cme218
+python -m venv cme218-venv
+```
+This will take a few min. 
+
+Let's log onto a GPU node.
+```
+srun -p gpu-pascal --gres=gpu:1 --pty bash
+```
+
+Now, activate the environment with 
+```
+source cme218-venv/bin/activate
+```
+
+Now we can install pytorch with the following command (see https://pytorch.org/get-started/locally/)
+```
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+```
+
+This will take more then 10 minutes.
+
+You can exit the venv session with the following command
+```
+deactivate
+```
+
+Automated installation by submitting a job to the GPU partition to build unattended :-)
+```
+sbatch /opt/ohpc/pub/examples/slurm/build_pytorch_venv.slurm
+```
+
 ### Author
 Elliot Epstein
+### Acknowledgment
+Thanks to Steve Jones and Brian Tempero for helpful tips on the cluster management.
